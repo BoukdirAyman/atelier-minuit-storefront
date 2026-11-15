@@ -1,0 +1,40 @@
+@media (max-width: 760px) {
+  .admin-sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 11px 15px 0;
+  }
+
+  .admin-brand {
+    width: max-content;
+    padding: 0;
+  }
+
+  .admin-nav {
+    display: flex;
+    width: 100%;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 9px 0 10px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-nav a {
+    min-height: 34px;
+    flex: 0 0 auto;
+    gap: 7px;
+    padding: 0 9px;
+    font-size: 9px;
+    white-space: nowrap;
+  }
+
+  .admin-nav ~ .admin-nav {
+    display: none;
+  }
+}
