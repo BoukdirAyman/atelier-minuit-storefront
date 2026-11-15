@@ -1,0 +1,148 @@
+<div class="storefront">
+  <div class="announcement">
+    <span>{{ translations.t('store.shipping') }}</span>
+    <span class="announcement-divider"></span>
+    <span>{{ translations.t('store.location') }}</span>
+    <a routerLink="/admin">{{ translations.t('store.professional') }} <svg lucideArrowUpRight [size]="13"></svg></a>
+  </div>
+
+  <header class="store-header">
+    <a class="wordmark" routerLink="/" [attr.aria-label]="translations.t('brand.home')">
+      <span class="wordmark-symbol">A<span>.</span></span>
+      <span class="wordmark-name">ATELIER <b>MINUIT</b><small>{{ translations.t('brand.tagline') }}</small></span>
+    </a>
+    <nav class="main-nav" [attr.aria-label]="translations.t('nav.main')">
+      <a href="#collection">{{ translations.t('nav.watches') }}</a>
+      <a href="#collection" (click)="setCategory('STRAP')">{{ translations.t('nav.straps') }}</a>
+      <a href="#collection" (click)="setCategory('ACCESSORY')">{{ translations.t('nav.accessories') }}</a>
+      <a href="#maison">{{ translations.t('nav.house') }}</a>
+    </nav>
+    <div class="header-actions">
+      <label class="search-box">
+        <svg lucideSearch [size]="17"></svg>
+        <input [attr.aria-label]="translations.t('search.product.aria')" [placeholder]="translations.t('search.placeholder')" [value]="query()" (input)="query.set($any($event.target).value)" />
+      </label>
+      <app-language-switcher />
+      <button class="icon-button bag-button" type="button" [attr.aria-label]="translations.t('cart.open')" (click)="cartOpen.set(true)">
+        <svg lucideShoppingBag [size]="19"></svg><span class="bag-count">{{ cartCount() }}</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> {{ translations.t('hero.eyebrow') }}</div>
+        <h1 id="hero-title" class="serif">{{ translations.t('hero.title.first') }}<br />{{ translations.t('hero.title.second') }}<span>.</span></h1>
+        <p>{{ translations.t('hero.description') }}</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#collection">{{ translations.t('hero.discover') }} <svg lucideArrowRight [size]="17"></svg></a>
+          <a class="text-link" href="#maison">{{ translations.t('hero.knowhow') }} <svg lucideArrowUpRight [size]="15"></svg></a>
+        </div>
+        <div class="hero-meta">
+          <div class="meta-rule"></div>
+          <span>01 — 04</span>
+          <span class="meta-caption">{{ translations.t('hero.meta') }}</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1600&q=90" [alt]="translations.t('hero.photo.aria')" />
+        <div class="hero-image-caption"><span>LA MINUIT 38</span><span>{{ translations.t('hero.watch.collection') }} · {{ translations.money(420) }}</span></div>
+        <div class="hero-stamp"><span>{{ translations.t('hero.stamp.made') }}</span><b [innerHTML]="translations.t('hero.stamp.last')"></b><span>PARIS · 2026</span></div>
+      </div>
+      <div class="hero-side-note">{{ translations.t('hero.side') }} <span>↓</span></div>
+    </section>
+
+    <section class="trust-strip" [attr.aria-label]="translations.t('trust.aria')">
+      <div><svg lucideShieldCheck [size]="19"></svg><span>{{ translations.t('trust.warranty') }}</span></div>
+      <div><svg lucideCheck [size]="18"></svg><span>{{ translations.t('trust.assembled') }}</span></div>
+      <div><svg lucideArrowUpRight [size]="17"></svg><span>{{ translations.t('trust.returns') }}</span></div>
+      <div><span class="trust-mark">✳</span><span>{{ translations.t('store.shipping') }}</span></div>
+    </section>
+
+    <section class="catalog-section" id="collection">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">{{ translations.t('catalog.eyebrow') }}</div>
+          <h2 class="serif">{{ translations.t('catalog.title') }}<span>.</span></h2>
+        </div>
+        <p [innerHTML]="translations.t('catalog.description')"></p>
+      </div>
+
+      <div class="catalog-toolbar">
+        <div class="category-tabs" role="tablist" [attr.aria-label]="translations.t('catalog.filter.aria')">
+          <button type="button" role="tab" [attr.aria-selected]="category() === 'ALL'" [class.active]="category() === 'ALL'" (click)="setCategory('ALL')">{{ translations.t('catalog.all') }} <span>08</span></button>
+          <button type="button" role="tab" [attr.aria-selected]="category() === 'WATCH'" [class.active]="category() === 'WATCH'" (click)="setCategory('WATCH')">{{ translations.t('nav.watches') }}</button>
+          <button type="button" role="tab" [attr.aria-selected]="category() === 'STRAP'" [class.active]="category() === 'STRAP'" (click)="setCategory('STRAP')">{{ translations.t('nav.straps') }}</button>
+          <button type="button" role="tab" [attr.aria-selected]="category() === 'ACCESSORY'" [class.active]="category() === 'ACCESSORY'" (click)="setCategory('ACCESSORY')">{{ translations.t('nav.accessories') }}</button>
+        </div>
+        <span class="result-count">{{ filteredProducts().length }} {{ translations.t('catalog.pieces') }}</span>
+      </div>
+
+      <div class="product-grid">
+        @for (product of filteredProducts(); track product.id) {
+          <article class="product-card">
+            <div class="product-image-wrap">
+              <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+              @if (product.badge) { <span class="product-badge">{{ translations.productBadge(product.badge) }}</span> }
+              <button class="favorite-button" [class.is-favorite]="isFavorite(product.id)" type="button" [attr.aria-label]="isFavorite(product.id) ? translations.t('favorite.remove') : translations.t('favorite.add')" (click)="toggleFavorite(product.id)">
+                <svg lucideHeart [size]="18" [attr.fill]="isFavorite(product.id) ? 'currentColor' : 'none'"></svg>
+              </button>
+              <button class="quick-add" type="button" (click)="addToCart(product)">{{ translations.t('cart.add') }} <svg lucideArrowRight [size]="16"></svg></button>
+            </div>
+            <div class="product-info">
+              <div><span class="product-category">{{ categoryLabel(product.category) }} · {{ translations.collectionName(product.collection) }}</span><h3>{{ product.name }}</h3></div>
+              <span class="product-price">{{ translations.money(product.price) }}</span>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-products"><svg lucideSearch [size]="23"></svg><span>{{ translations.t('catalog.empty') }}</span></div>
+        }
+      </div>
+      <a class="catalog-more" href="#collection" (click)="setCategory('ALL')">{{ translations.t('catalog.more') }} <svg lucideArrowRight [size]="17"></svg></a>
+    </section>
+
+    <section class="craft-section" id="maison">
+      <div class="craft-photo"><img src="https://images.unsplash.com/photo-1619134778706-7015533a6150?auto=format&fit=crop&w=1300&q=85" [alt]="translations.t('craft.photo.aria')" loading="lazy" /></div>
+      <div class="craft-copy">
+        <div class="eyebrow"><span></span> {{ translations.t('craft.eyebrow') }}</div>
+        <h2 class="serif">{{ translations.t('craft.title.first') }}<br />{{ translations.t('craft.title.second') }}<span>.</span></h2>
+        <p>{{ translations.t('craft.description') }}</p>
+        <a class="text-link" href="#collection">{{ translations.t('craft.enter') }} <svg lucideArrowUpRight [size]="15"></svg></a>
+        <div class="craft-signature">ATELIER MINUIT <span>{{ translations.t('craft.since') }}</span></div>
+      </div>
+    </section>
+
+    <section class="newsletter">
+      <div><div class="eyebrow">{{ translations.t('newsletter.eyebrow') }}</div><h2 class="serif">{{ translations.t('newsletter.title') }}</h2></div>
+      <form (submit)="$event.preventDefault()"><label class="sr-only" for="newsletter-email">{{ translations.t('newsletter.email.aria') }}</label><input id="newsletter-email" type="email" [placeholder]="translations.t('newsletter.email.placeholder')" required /><button type="submit" [attr.aria-label]="translations.t('newsletter.submit')"><svg lucideArrowRight [size]="19"></svg></button></form>
+    </section>
+  </main>
+
+  <footer class="store-footer">
+    <a class="wordmark footer-wordmark" routerLink="/" [attr.aria-label]="translations.t('brand.home')"><span class="wordmark-symbol">A<span>.</span></span><span class="wordmark-name">ATELIER <b>MINUIT</b><small>{{ translations.t('brand.tagline') }}</small></span></a>
+    <span>© 2026 Atelier Minuit</span>
+    <div><a href="#collection">{{ translations.t('footer.contact') }}</a><a href="#collection">{{ translations.t('footer.shipping') }}</a><a routerLink="/admin">{{ translations.t('store.professional') }}</a></div>
+  </footer>
+
+  @if (notice()) {
+    <div class="toast" role="status"><svg lucideCheck [size]="17"></svg>{{ notice() }}</div>
+  }
+
+  @if (cartOpen()) {
+    <button class="drawer-scrim" type="button" [attr.aria-label]="translations.t('cart.close')" (click)="cartOpen.set(false)"></button>
+    <aside class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <div class="drawer-header"><div><span class="eyebrow">{{ translations.t('cart.selection') }}</span><h2 id="cart-title" class="serif">{{ translations.t('cart.title') }} <span>({{ cartCount() }})</span></h2></div><button class="icon-button" type="button" [attr.aria-label]="translations.t('cart.close')" (click)="cartOpen.set(false)"><svg lucideX [size]="21"></svg></button></div>
+      @if (cart().length) {
+        <div class="cart-lines">
+          @for (line of cart(); track line.product.id) {
+            <article class="cart-line"><img [src]="line.product.imageUrl" [alt]="line.product.name" /><div class="cart-line-copy"><span class="product-category">{{ translations.collectionName(line.product.collection) }}</span><h3>{{ line.product.name }}</h3><span>{{ translations.money(line.product.price) }}</span><div class="quantity-control"><button type="button" [attr.aria-label]="translations.t('cart.removeOne', { name: line.product.name })" (click)="changeQuantity(line.product.id, -1)"><svg lucideMinus [size]="13"></svg></button><span>{{ line.quantity }}</span><button type="button" [attr.aria-label]="translations.t('cart.addOne', { name: line.product.name })" (click)="changeQuantity(line.product.id, 1)"><svg lucidePlus [size]="13"></svg></button></div></div></article>
+          }
+        </div>
+        <div class="cart-summary"><div><span>{{ translations.t('cart.subtotal') }}</span><b>{{ translations.money(cartTotal()) }}</b></div><small>{{ translations.t('cart.taxShipping') }}</small><button class="button button-dark checkout-button" type="button" (click)="placeOrder()">{{ translations.t('cart.checkout') }} <svg lucideArrowRight [size]="17"></svg></button></div>
+      } @else {
+        <div class="cart-empty"><svg lucideShoppingBag [size]="27"></svg><h3>{{ translations.t('cart.empty.title') }}</h3><p>{{ translations.t('cart.empty.description') }}</p><button class="button button-dark" type="button" (click)="cartOpen.set(false)">{{ translations.t('cart.empty.discover') }}</button></div>
+      }
+    </aside>
+  }
+</div>
