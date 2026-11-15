@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+	color-scheme: light;
+	--ink: #17231f;
+	--muted: #748078;
+	--line: #e6e9e4;
+	--paper: #fbfcf9;
+	--white: #ffffff;
+	--forest: #244b3e;
+	--forest-deep: #17362d;
+	--lime: #c9dc70;
+	--clay: #b94d38;
+	--soft-green: #edf2e8;
+	--shadow: 0 22px 65px rgb(23 54 45 / 12%);
+	font-family: 'DM Sans', sans-serif;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-optical-sizing: auto;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; background: var(--paper); color: var(--ink); }
+html[dir='rtl'] body { direction: rtl; }
+html[dir='rtl'] .announcement a { right: auto; left: max(4.5vw, 24px); }
+html[dir='rtl'] .cart-drawer { inset: 0 auto 0 0; animation-name: drawer-in-rtl; }
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { color: inherit; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+::selection { background: var(--lime); color: var(--ink); }
+
+.serif { font-family: 'Playfair Display', Georgia, serif; }
+.icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.icon svg { width: 19px; height: 19px; stroke-width: 1.7; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+@keyframes drawer-in-rtl { from { transform: translateX(-25px); opacity: .7; } to { transform: translateX(0); opacity: 1; } }
