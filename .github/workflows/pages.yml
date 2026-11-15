@@ -30,11 +30,11 @@ jobs:
       - name: Build Angular app
         run: npm run build -- --base-href /atelier-minuit-storefront/
       - name: Add SPA fallback
-        run: cp dist/atelier-horloger/index.html dist/atelier-horloger/404.html
+        run: cp dist/atelier-horloger/browser/index.html dist/atelier-horloger/browser/404.html
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/atelier-horloger
+          path: dist/atelier-horloger/browser
 
   deploy:
     environment:
