@@ -91,6 +91,10 @@ Dans les variables d’environnement du service, définissez `SPRING_API_URL` av
 
 Autorisez l’origine `https://<nom-du-site>.onrender.com` dans la configuration CORS Spring Boot. Si l’API n’est pas encore déployée, définissez `SPRING_API_URL` sur une URL temporaire accessible ; le frontend de production n’utilise pas les données simulées.
 
+## Déploiement gratuit sur GitHub Pages
+
+Le workflow `.github/workflows/pages.yml` construit et publie le site sur GitHub Pages à chaque mise à jour de `main`. Dans **Settings → Pages**, choisissez **GitHub Actions** comme source. Le site GitHub Pages fonctionne en mode démonstration sans backend et utilise l’URL `https://BoukdirAyman.github.io/atelier-minuit-storefront/`.
+
 ## Organisation
 
 - `src/app/pages/storefront.page.*` : catalogue, recherche, favoris et panier de démonstration.
