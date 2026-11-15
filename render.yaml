@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: atelier-minuit-storefront
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist/atelier-horloger/browser
+    envVars:
+      - key: SPRING_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
